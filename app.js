@@ -2,6 +2,7 @@
 let content = document.getElementById("mainContent");
 let mainSection = document.getElementById("mainSection");
 let pages = document.getElementById("pages");
+let seeMorePage = document.getElementById("seeMorePage");
 let PageSize = 12;
 let currentPage = 1;
 
@@ -14,11 +15,10 @@ let selectCity = document.getElementById("selectCity");
 let from = document.getElementById("from");
 let until = document.getElementById("until");
 capacityText.innerText = capacitySlider.value;
-
-console.log(capacitySlider.value);
+let clicked = false;
+let currentID = 0;
 
 // ფილტრი: ღილაკები
-
 reset.addEventListener("click", () => {
   capacitySlider.value = 4;
   capacityText.innerText = `4`;
@@ -100,11 +100,42 @@ function addItem(item) {
 </div>`;
 }
 
+//see more ფუნქცია
 function test(id) {
   fetch(`https://rentcar.stepprojects.ge/api/Car/${id}`)
     .then((res) => res.json())
-    .then((data) => console.log(data));
-  content.classList.add("slider");
+    .then((data) => {
+      if (clicked && currentID == id) {
+        seeMorePage.classList.remove("show");
+        seeMorePage.classList.add("hide");
+        clicked = false;
+      } else {
+        seeMorePage.classList.remove("hide");
+        seeMorePage.classList.add("show");
+        clicked = true;
+      }
+      mainSection.scrollIntoView({ behavior: "smooth" });
+      currentID = id;
+      seeMorePage.innerHTML = seeMore(data);
+    });
+}
+
+function seeMore(item) {
+  return `<p>ბრენდი: ${item.brand}</p>
+  <p>მოდელი: ${item.model}</p>
+  <p>ქალაქი: ${item.city}</p>
+  <p>წელი: ${item.year}</p>
+  <p>ფასი: ${item.price}K$</p>
+  <p>ტევადობა: ${item.capacity}</p>
+  <p>კოლოფი: ${item.transmission}</p>
+  <p>საწვავი: ${item.fuelCapacity}<p>
+  <button onclick="closeSeeMore()" style="padding: 5px 15px">დახურვა</button>`;
+}
+
+function closeSeeMore() {
+  clicked = false;
+  seeMorePage.classList.remove("show");
+  seeMorePage.classList.add("hide");
 }
 
 // სასურველი რაოდენობის გვერდების დამატება
@@ -166,8 +197,8 @@ function addPopular(item) {
   <div class="content-box">
     <span class="card-title">${item.brand} | ${item.model}</span>
     <p class="card-content">ქალაქი: ${item.city}</p> 
-    <button class="see-more" onclick="test(${item.id})">Add To cart</button>
-    <button class="see-more">See More</button>
+    <button class="see-more">Add To cart</button>
+    <button class="see-more" onclick="test(${item.id})">See More</button>
   </div>
   <div class="date-box">
     <span class="month">${item.year}</span>
