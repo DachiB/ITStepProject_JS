@@ -89,7 +89,6 @@ function addItem(item) {
   <div class="content-box">
     <span class="card-title">${item.brand} | ${item.model}</span>
     <p class="card-content">ქალაქი: ${item.city}</p> 
-    <button class="see-more">Add To cart</button>
     <button class="see-more" onclick="test(${item.id})">See More</button>
   </div>
   <div class="date-box">
@@ -197,7 +196,6 @@ function addPopular(item) {
   <div class="content-box">
     <span class="card-title">${item.brand} | ${item.model}</span>
     <p class="card-content">ქალაქი: ${item.city}</p> 
-    <button class="see-more">Add To cart</button>
     <button class="see-more" onclick="test(${item.id})">See More</button>
   </div>
   <div class="date-box">
